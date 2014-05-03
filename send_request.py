@@ -133,6 +133,8 @@ agent = Agent(lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api
 
 id_market = 2
 
+agent.balance = agent.GetBalance()
+print 'balance : ', agent.balance
 status = agent.GetTrades(id_market)
 print 'Fetch trades : ', status
 status = agent.GetMyTrades(id_market)
@@ -143,14 +145,14 @@ success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market
 print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
 print 'Send_success : ', success_send, ', Sent : ', sent
 print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-agent.balance = agent.GetBalance()
-print 'balance : ', agent.balance
 	
 while(True):
 	time.sleep(1)
 	response = agent.HasChanged()
 	if response:
 		print ''
+		agent.balance = agent.GetBalance()
+		print 'balance : ', agent.balance
 		status = agent.GetTrades(id_market)
 		print 'Fetch trades : ', status
 		status = agent.GetMyTrades(id_market)
@@ -161,8 +163,6 @@ while(True):
 		print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
 		print 'Send_success : ', success_send, ', Sent : ', sent
 		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-		agent.balance = agent.GetBalance()
-		print 'balance : ', agent.balance
 		
 		
 # print obj.get_depth(data['limits'], 3)
