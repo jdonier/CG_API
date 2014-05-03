@@ -69,7 +69,7 @@ class Agent(object):
 		self.pnl = 0.01*(sell_volume*funcs.get_sell_avg_price(self.mytrades) - buy_volume*funcs.get_buy_avg_price(self.mytrades) + (buy_volume - sell_volume)*last)
 				
 		self.position1 = buy_volume - sell_volume
-		if self=position2==None:
+		if self.position2==None:
 			self.position2 = buy_volume - sell_volume
 		self.position2 = self.position2 * (1.0 -  m.exp(-1.0/self.tau)) + self.position1 * m.exp(-1.0/self.tau)
 		
