@@ -12,7 +12,7 @@ class Agent(object):
 		self.qty = qty
 		self.spread = spread
 		self.position1 = 0
-		self.position2 = 0
+		self.position2 = None
 		self.pnl = 0
 		self.target = 50
 		self.trades = {}
@@ -69,6 +69,8 @@ class Agent(object):
 		self.pnl = 0.01*(sell_volume*funcs.get_sell_avg_price(self.mytrades) - buy_volume*funcs.get_buy_avg_price(self.mytrades) + (buy_volume - sell_volume)*last)
 				
 		self.position1 = buy_volume - sell_volume
+		if self=position2==None:
+			self.position2 = buy_volume - sell_volume
 		self.position2 = self.position2 * (1.0 -  m.exp(-1.0/self.tau)) + self.position1 * m.exp(-1.0/self.tau)
 		
 		mid = self.target - self.lambda1 * self.position1 - self.lambda2 * (self.position1 - self.position2)
@@ -133,37 +135,42 @@ agent = Agent(lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api
 
 id_market = 2
 
-agent.balance = agent.GetBalance()
-print 'balance : ', agent.balance
-status = agent.GetTrades(id_market)
-print 'Fetch trades : ', status
-status = agent.GetMyTrades(id_market)
-print 'Fetch my trades : ', status
-status = agent.GetMyLimits(id_market)
-print 'Fetch my limits : ', status	
-success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market)
-print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-print 'Send_success : ', success_send, ', Sent : ', sent
-print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+try:
+	agent.balance = agent.GetBalance()
+	print 'balance : ', agent.balance
+	status = agent.GetTrades(id_market)
+	print 'Fetch trades : ', status
+	status = agent.GetMyTrades(id_market)
+	print 'Fetch my trades : ', status
+	status = agent.GetMyLimits(id_market)
+	print 'Fetch my limits : ', status	
+	success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market)
+	print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+	print 'Send_success : ', success_send, ', Sent : ', sent
+	print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+except:
+	print 'Failed to initialize'
 	
 while(True):
-	time.sleep(1)
-	response = agent.HasChanged()
-	if response:
-		print ''
-		agent.balance = agent.GetBalance()
-		print 'balance : ', agent.balance
-		status = agent.GetTrades(id_market)
-		print 'Fetch trades : ', status
-		status = agent.GetMyTrades(id_market)
-		print 'Fetch my trades : ', status
-		status = agent.GetMyLimits(id_market)
-		print 'Fetch my limits : ', status
-		success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market)
-		print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-		print 'Send_success : ', success_send, ', Sent : ', sent
-		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-		
+	try:
+		time.sleep(1)
+		response = agent.HasChanged()
+		if response:
+			print ''
+			agent.balance = agent.GetBalance()
+			print 'balance : ', agent.balance
+			status = agent.GetTrades(id_market)
+			print 'Fetch trades : ', status
+			status = agent.GetMyTrades(id_market)
+			print 'Fetch my trades : ', status
+			status = agent.GetMyLimits(id_market)
+			print 'Fetch my limits : ', status
+			success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market)
+			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+			print 'Send_success : ', success_send, ', Sent : ', sent
+			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+	except:
+		print 'Connection monmentarily lost'
 		
 # print obj.get_depth(data['limits'], 3)
 
