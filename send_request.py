@@ -24,7 +24,7 @@ class Agent(object):
 		
 	def HasChanged(self):
 		values = {'key' : self.api_key, 'function' : 'get_change'}
-		time.sleep(0.15)
+		time.sleep(0.01)
 		data = funcs.call(values)
 		return -1 if data['status']==1 else data['change']
 	
@@ -127,7 +127,7 @@ class Agent(object):
 		return success_send, sent, success_cancel, canceled, mid, s
 	
 	
-sleep_time = 2.2
+sleep_time = 0.1
 		
 funcs = la.functions()
 key = 	'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#'1\G746OIV9SDMFRS26Z4H9OGM3J1VRYM',#
