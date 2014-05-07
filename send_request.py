@@ -15,7 +15,7 @@ class Agent(object):
 		self.position2 = None
 		self.pnl = 0
 		self.target = 50
-		self.last_trade = {}
+		self.last_trade = None
 		self.limits = {}
 		self.mytrades = {}
 		self.mylimits = {}
@@ -38,12 +38,8 @@ class Agent(object):
 		values = {'key' : self.api_key, 'function' : 'get_trades', 'id_market' : id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
-		last_trade = data['trades']
-		if last_trade==None:
-			self.last_trade = None
-		else:
-			self.last_trade = last_trade.price
-		return -1 if data['status']==1 else self.last_trade
+		self.last_trade  = data['trades']
+		return -1 if data['status']==1 else data['trades']
 	
 	def GetMyTrades(self, id_market):
 		values = {'key' : self.api_key, 'function' : 'get_my_trades', 'id_market' : id_market}
