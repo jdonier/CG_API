@@ -15,7 +15,7 @@ class Agent(object):
 		self.position2 = None
 		self.pnl = 0
 		self.target = 50
-		self.trades = {}
+		self.last_trade = {}
 		self.limits = {}
 		self.mytrades = {}
 		self.mylimits = {}
@@ -34,12 +34,16 @@ class Agent(object):
 		data = funcs.call(values)
 		return -1 if data['status']==1 else data['balance']
 	
-	def GetTrades(self, id_market):
+	def GetLastTrade(self, id_market):
 		values = {'key' : self.api_key, 'function' : 'get_trades', 'id_market' : id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
-		self.trades = data['trades']
-		return -1 if data['status']==1 else len(data['trades'])
+		last_trade = data['trades']
+		if last_trade==None:
+			self.last_trade = None
+		else:
+			self.last_trade = last_trade.price
+		return -1 if data['status']==1 else self.last_trade
 	
 	def GetMyTrades(self, id_market):
 		values = {'key' : self.api_key, 'function' : 'get_my_trades', 'id_market' : id_market}
@@ -63,10 +67,11 @@ class Agent(object):
 		return -1 if data['status']==1 else len(data['limits'])
 			
 	def DoIt(self, id_market):
-		last = funcs.get_last_price(self.trades)
+		last = self.last_trade
 		buy_volume = funcs.get_buy_volume(self.mytrades)
 		sell_volume = funcs.get_sell_volume(self.mytrades)
-		self.pnl = 0.01*(sell_volume*funcs.get_sell_avg_price(self.mytrades) - buy_volume*funcs.get_buy_avg_price(self.mytrades) + (buy_volume - sell_volume)*last)
+		if last != None:
+			self.pnl = 0.01*(sell_volume*funcs.get_sell_avg_price(self.mytrades) - buy_volume*funcs.get_buy_avg_price(self.mytrades) + (buy_volume - sell_volume)*last)
 				
 		self.position1 = buy_volume - sell_volume
 		if self.position2==None:
@@ -141,7 +146,7 @@ id_market = 2
 try:
 	agent.balance = agent.GetBalance()
 	print 'balance : ', agent.balance
-	status = agent.GetTrades(id_market)
+	status = agent.GetLastTrade(id_market)
 	print 'Fetch trades : ', status
 	status = agent.GetMyTrades(id_market)
 	print 'Fetch my trades : ', status
@@ -162,7 +167,7 @@ while(True):
 			print ''
 			agent.balance = agent.GetBalance()
 			print 'balance : ', agent.balance
-			status = agent.GetTrades(id_market)
+			status = agent.GetLastTrade(id_market)
 			print 'Fetch trades : ', status
 			status = agent.GetMyTrades(id_market)
 			print 'Fetch my trades : ', status
