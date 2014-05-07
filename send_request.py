@@ -87,6 +87,7 @@ class Agent(object):
 		success_cancel = True
 		sent = 0
 		canceled = 0
+		sent_prices=[]	
 			
 		if my_buy_price != buy_target_price:
 			if my_buy_price != -1:
@@ -97,7 +98,7 @@ class Agent(object):
 					if data['status'] == 1:
 						success_cancel = False
 					else:
-						canceled += 1
+						canceled += 1						
 			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : self.qty}	
 			time.sleep(sleep_time)
 			data = funcs.call(values)
@@ -105,6 +106,7 @@ class Agent(object):
 				success_send = False
 			else:
 				sent += 1
+				sent_prices.append(buy_target_price)
 		
 		if my_sell_price != sell_target_price:
 			if my_sell_price != -1:
@@ -123,8 +125,9 @@ class Agent(object):
 				success_send = False
 			else:
 				sent += 1
+				sent_prices.append(sell_target_price)
 			
-		return success_send, sent, success_cancel, canceled, mid, s
+		return success_send, sent, success_cancel, canceled, mid, s, sent_prices
 	
 	
 sleep_time = 0.1
@@ -144,9 +147,9 @@ try:
 	print 'Fetch my trades : ', status
 	status = agent.GetMyLimits(id_market)
 	print 'Fetch my limits : ', status	
-	success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market)
+	success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt(id_market)
 	print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-	print 'Send_success : ', success_send, ', Sent : ', sent
+	print 'Send_success : ', success_send, ', Sent : ', sent, 'prices : ', sent_prices
 	print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 except:
 	print 'Failed to initialize'
@@ -165,9 +168,9 @@ while(True):
 			print 'Fetch my trades : ', status
 			status = agent.GetMyLimits(id_market)
 			print 'Fetch my limits : ', status
-			success_send, sent, success_cancel, canceled, mid, spread = agent.DoIt(id_market)
+			success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt(id_market)
 			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-			print 'Send_success : ', success_send, ', Sent : ', sent
+			print 'Send_success : ', success_send, ', Sent : ', sent, 'prices : ', sent_prices
 			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 	except:
 		print 'Connection monmentarily lost'
