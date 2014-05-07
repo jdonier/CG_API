@@ -149,7 +149,7 @@ try:
 	print 'Fetch my limits : ', status	
 	success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt(id_market)
 	print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-	print 'Send_success : ', success_send, ', Sent : ', sent, 'prices : ', sent_prices
+	print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
 	print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 except:
 	print 'Failed to initialize'
@@ -170,7 +170,7 @@ while(True):
 			print 'Fetch my limits : ', status
 			success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt(id_market)
 			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-			print 'Send_success : ', success_send, ', Sent : ', sent, 'prices : ', sent_prices
+			print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
 			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 	except:
 		print 'Connection monmentarily lost'
