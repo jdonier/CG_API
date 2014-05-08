@@ -168,7 +168,7 @@ while(True):
 			agent = agents[id_market]
 			print ''
 			agent.balance = agent.GetBalance()
-			print 'balance : ', agent.balance
+			print 'balance : ', agent.balance, ' time : ', time.time()
 			status = agent.GetLastTrade()
 			print 'Fetch trades : ', status
 			status = agent.GetMyTrades()
