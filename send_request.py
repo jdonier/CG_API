@@ -165,6 +165,7 @@ while(True):
 	try:
 		time.sleep(1)
 		response = agents[id_markets[0]].HasChanged()
+		print response
 		for id_market in response:
 			try:
 				if id_market in agent.keys():
