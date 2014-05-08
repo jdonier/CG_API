@@ -144,7 +144,8 @@ for id_market in id_markets:
 
 for key, agent in agents.iteritems():
 	try:
-		print 'Agent on market ', key
+		print ''
+		print 'Agent on market ', key, ' time : ', time.time()
 		agent.balance = agent.GetBalance()
 		print 'balance : ', agent.balance
 		status = agent.GetLastTrade()
@@ -158,29 +159,33 @@ for key, agent in agents.iteritems():
 		print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
 		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 	except:
-		print 'Failed to initialize'
+		print 'Failed to initialize on market ', key
 	
 while(True):
 	try:
 		time.sleep(1)
 		response = agents[id_markets[0]].HasChanged()
 		for id_market in response:
-			agent = agents[id_market]
-			print ''
-			agent.balance = agent.GetBalance()
-			print 'balance : ', agent.balance, ' time : ', time.time()
-			status = agent.GetLastTrade()
-			print 'Fetch trades : ', status
-			status = agent.GetMyTrades()
-			print 'Fetch my trades : ', status
-			status = agent.GetMyLimits()
-			print 'Fetch my limits : ', status
-			success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
-			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-			print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-	except:
-		print 'Connection monmentarily lost'
+			try:
+				agent = agents[id_market]
+				print ''
+				print 'Agent on market ', key, ' time : ', time.time()
+				agent.balance = agent.GetBalance()
+				print 'balance : ', agent.balance
+				status = agent.GetLastTrade()
+				print 'Fetch trades : ', status
+				status = agent.GetMyTrades()
+				print 'Fetch my trades : ', status
+				status = agent.GetMyLimits()
+				print 'Fetch my limits : ', status
+				success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
+				print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+				print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+				print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+			except:
+				print 'Connection monmentarily lost on market', id_market
+		except:
+			print 'Could not connect to the server'
 		
 # print obj.get_depth(data['limits'], 3)
 
