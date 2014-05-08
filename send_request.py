@@ -184,8 +184,8 @@ while(True):
 				print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 			except:
 				print 'Connection monmentarily lost on market', id_market
-		except:
-			print 'Could not connect to the server'
+	except:
+		print 'Could not connect to the server'
 		
 # print obj.get_depth(data['limits'], 3)
 
