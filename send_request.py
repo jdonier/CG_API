@@ -4,7 +4,7 @@ import math as m
 
 class Agent(object):
 
-	def __init__(self, lambda1, lambda2, tau, qty, spread, api_key, funcs):
+	def __init__(self, id_market lambda1, lambda2, tau, qty, spread, api_key, funcs):
 		self.api_key = api_key
 		self.lambda1 = lambda1
 		self.lambda2 = lambda2
@@ -21,6 +21,7 @@ class Agent(object):
 		self.mylimits = {}
 		self.balance = 0
 		self.funcs = funcs
+		self.id_market = id_market
 		
 	def HasChanged(self):
 		values = {'key' : self.api_key, 'function' : 'get_change'}
@@ -34,35 +35,35 @@ class Agent(object):
 		data = funcs.call(values)
 		return -1 if data['status']==1 else data['balance']
 	
-	def GetLastTrade(self, id_market):
-		values = {'key' : self.api_key, 'function' : 'get_trades', 'id_market' : id_market}
+	def GetLastTrade(self):
+		values = {'key' : self.api_key, 'function' : 'get_trades', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
 		self.last_trade  = data['trades']
 		return -1 if data['status']==1 else data['trades']
 	
-	def GetMyTrades(self, id_market):
-		values = {'key' : self.api_key, 'function' : 'get_my_trades', 'id_market' : id_market}
+	def GetMyTrades(self):
+		values = {'key' : self.api_key, 'function' : 'get_my_trades', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
 		self.mytrades = data['trades']
 		return -1 if data['status']==1 else len(data['trades'])
 	
-	def GetLimits(self, id_market):
-		values = {'key' : self.api_key, 'function' : 'get_limits', 'id_market' : id_market}
+	def GetLimits(self):
+		values = {'key' : self.api_key, 'function' : 'get_limits', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
 		self.limits=data['limits']
 		return -1 if data['status']==1 else len(data['limits'])
 	
-	def GetMyLimits(self, id_market):
-		values = {'key' : self.api_key, 'function' : 'get_my_limits', 'id_market' : id_market}
+	def GetMyLimits(self):
+		values = {'key' : self.api_key, 'function' : 'get_my_limits', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
 		self.mylimits=data['limits']
 		return -1 if data['status']==1 else len(data['limits'])
 			
-	def DoIt(self, id_market):
+	def DoIt(self):
 		last = self.last_trade
 		buy_volume = funcs.get_buy_volume(self.mytrades)
 		sell_volume = funcs.get_sell_volume(self.mytrades)
@@ -100,7 +101,7 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1						
-			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : self.qty}	
+			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : self.qty}	
 			time.sleep(sleep_time)
 			data = funcs.call(values)
 			if data['status'] == 1:
@@ -119,7 +120,7 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1
-			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : self.qty}	
+			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : self.qty}	
 			time.sleep(sleep_time)
 			data = funcs.call(values)
 			if data['status'] == 1:
@@ -135,41 +136,46 @@ sleep_time = 0.1
 		
 funcs = la.functions()
 key = 	'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#'1\G746OIV9SDMFRS26Z4H9OGM3J1VRYM',#
-agent = Agent(lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api_key = key, funcs = funcs)
 
-id_market = 2
+id_markets = [1,2]
+agents = {}
+for id_market in id_markets:
+	agents[id_market] = Agent(id_market = id_market,  lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api_key = key, funcs = funcs)
 
-try:
-	agent.balance = agent.GetBalance()
-	print 'balance : ', agent.balance
-	status = agent.GetLastTrade(id_market)
-	print 'Fetch trades : ', status
-	status = agent.GetMyTrades(id_market)
-	print 'Fetch my trades : ', status
-	status = agent.GetMyLimits(id_market)
-	print 'Fetch my limits : ', status	
-	success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt(id_market)
-	print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-	print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-	print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-except:
-	print 'Failed to initialize'
+for key, agent in agents.iteritems():
+	try:
+		print 'Agent on market ', key
+		agent.balance = agent.GetBalance()
+		print 'balance : ', agent.balance
+		status = agent.GetLastTrade()
+		print 'Fetch trades : ', status
+		status = agent.GetMyTrades()
+		print 'Fetch my trades : ', status
+		status = agent.GetMyLimits()
+		print 'Fetch my limits : ', status	
+		success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
+		print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+		print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+	except:
+		print 'Failed to initialize'
 	
 while(True):
 	try:
 		time.sleep(1)
-		response = agent.HasChanged()
-		if response:
+		response = agents[id_markets[0]].HasChanged()
+		for id_market in response:
+			agent = agents[id_market]
 			print ''
 			agent.balance = agent.GetBalance()
 			print 'balance : ', agent.balance
-			status = agent.GetLastTrade(id_market)
+			status = agent.GetLastTrade()
 			print 'Fetch trades : ', status
-			status = agent.GetMyTrades(id_market)
+			status = agent.GetMyTrades()
 			print 'Fetch my trades : ', status
-			status = agent.GetMyLimits(id_market)
+			status = agent.GetMyLimits()
 			print 'Fetch my limits : ', status
-			success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt(id_market)
+			success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
 			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
 			print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
 			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
