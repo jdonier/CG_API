@@ -164,7 +164,7 @@ for key, agent in agents.iteritems():
 while(True):
 	try:
 		time.sleep(1)
-		response = agents[id_markets[0]].HasChanged()
+		response = agents[markets[0]['id']].HasChanged()
 		for id_market in response:
 			try:
 				agent = agents[id_market]
