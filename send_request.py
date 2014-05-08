@@ -4,7 +4,7 @@ import math as m
 
 class Agent(object):
 
-	def __init__(self, id_market, lambda1, lambda2, tau, qty, spread, api_key, funcs):
+	def __init__(self, id_market, target_price, lambda1, lambda2, tau, qty, spread, api_key, funcs):
 		self.api_key = api_key
 		self.lambda1 = lambda1
 		self.lambda2 = lambda2
@@ -14,7 +14,7 @@ class Agent(object):
 		self.position1 = 0
 		self.position2 = None
 		self.pnl = 0
-		self.target = 50
+		self.target = target_price
 		self.last_trade = None
 		self.limits = {}
 		self.mytrades = {}
@@ -137,10 +137,10 @@ sleep_time = 0.1
 funcs = la.functions()
 key = 	'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#'1\G746OIV9SDMFRS26Z4H9OGM3J1VRYM',#
 
-id_markets = [1,2]
+markets = [{'id' :1, 'price' : 50}, {'id' : 2, 'price' : 50}]
 agents = {}
-for id_market in id_markets:
-	agents[id_market] = Agent(id_market = id_market,  lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api_key = key, funcs = funcs)
+for market in markets:
+	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api_key = key, funcs = funcs)
 
 for key, agent in agents.iteritems():
 	try:
