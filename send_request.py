@@ -167,26 +167,24 @@ while(True):
 		response = agents[id_markets[0]].HasChanged()
 		for id_market in response:
 			try:
-				agent = agents[id_market]
+				if id_market in agent.keys():
+					agent = agents[id_market]
+					print ''
+					print 'Agent on market ', key, ' time : ', time.time()
+					agent.balance = agent.GetBalance()
+					print 'balance : ', agent.balance
+					status = agent.GetLastTrade()
+					print 'Fetch trades : ', status
+					status = agent.GetMyTrades()
+					print 'Fetch my trades : ', status
+					status = agent.GetMyLimits()
+					print 'Fetch my limits : ', status
+					success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
+					print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+					print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+					print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 			except:
-				pass
-			try:
-				print ''
-				print 'Agent on market ', key, ' time : ', time.time()
-				agent.balance = agent.GetBalance()
-				print 'balance : ', agent.balance
-				status = agent.GetLastTrade()
-				print 'Fetch trades : ', status
-				status = agent.GetMyTrades()
-				print 'Fetch my trades : ', status
-				status = agent.GetMyLimits()
-				print 'Fetch my limits : ', status
-				success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
-				print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-				print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-				print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-			except:
-				print 'Connection monmentarily lost on market', id_market
+				print 'Ni connection on market', id_market
 	except:
 		print 'Could not connect to the server'
 		
