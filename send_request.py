@@ -167,7 +167,7 @@ while(True):
 		response = agents[id_markets[0]].HasChanged()
 		for id_market in response:
 			try:
-				if id_market in agents.keys():
+				if int(id_market) in agents.keys():
 					agent = agents[id_market]
 					print ''
 					print 'Agent on market ', key, ' time : ', time.time()
