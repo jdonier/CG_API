@@ -165,10 +165,9 @@ while(True):
 	try:
 		time.sleep(1)
 		response = agents[id_markets[0]].HasChanged()
-		print response
 		for id_market in response:
 			try:
-				if id_market in agent.keys():
+				if id_market in agents.keys():
 					agent = agents[id_market]
 					print ''
 					print 'Agent on market ', key, ' time : ', time.time()
@@ -185,7 +184,7 @@ while(True):
 					print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
 					print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 			except:
-				print 'Ni connection on market', id_market
+				print 'No connection on market', id_market
 	except:
 		print 'Could not connect to the server'
 		
