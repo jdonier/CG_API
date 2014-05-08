@@ -168,6 +168,9 @@ while(True):
 		for id_market in response:
 			try:
 				agent = agents[id_market]
+			except:
+				pass
+			try:
 				print ''
 				print 'Agent on market ', key, ' time : ', time.time()
 				agent.balance = agent.GetBalance()
