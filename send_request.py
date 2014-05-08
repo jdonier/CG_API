@@ -4,7 +4,7 @@ import math as m
 
 class Agent(object):
 
-	def __init__(self, id_market lambda1, lambda2, tau, qty, spread, api_key, funcs):
+	def __init__(self, id_market, lambda1, lambda2, tau, qty, spread, api_key, funcs):
 		self.api_key = api_key
 		self.lambda1 = lambda1
 		self.lambda2 = lambda2
