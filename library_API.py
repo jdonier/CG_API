@@ -9,7 +9,7 @@ class functions(object):
 		return None
 	
 	def call(self, values):
-		host = 'crowdguess2.herokuapp.com'#'localhost:8000'
+		host = 'localhost:8000'#'crowdguess2.herokuapp.com'#
 		url = '/API/'	
 		headers = {
 			'User-Agent': 'python',
@@ -71,8 +71,8 @@ class functions(object):
 		norm = 0
 		for trade in trades:
 			if trade['side']==1:
-				if trade.has_key('null'):
-					if not trade['null']:
+				if trade.has_key('nulltrade'):
+					if not trade['nulltrade']:
 						p += trade['volume']*trade['price']
 						norm += trade['volume']
 				else:
@@ -85,8 +85,8 @@ class functions(object):
 		norm = 0
 		for trade in trades:
 			if trade['side'] == -1:
-				if trade.has_key('null'):
-					if not trade['null']:
+				if trade.has_key('nulltrade'):
+					if not trade['nulltrade']:
 						p += trade['volume']*trade['price']
 						norm += trade['volume']
 				else:
@@ -107,7 +107,7 @@ class functions(object):
 				ids=[]
 				while i+j<len(limits) and limits[i+j]['price']==price:
 					volume += limits[i+j]['volume']
-					ids.append(limits[i+j]['id_order'])
+					ids.append(limits[i+j]['id'])
 					j+=1
 				level+=1	
 				ask.append({'price' : price, 'volume' : volume, 'id_orders' : ids})
@@ -123,7 +123,7 @@ class functions(object):
 				ids=[]
 				while i-j>=0 and limits[i-j]['price']==price:
 					volume += limits[i-j]['volume']
-					ids.append(limits[i-j]['id_order'])
+					ids.append(limits[i-j]['id'])
 					j+=1
 				level+=1	
 				bid.append({'price' : price, 'volume' : volume, 'id_orders' : ids})

@@ -70,6 +70,7 @@ class Agent(object):
 		if last != None:
 			self.pnl = 0.01*(sell_volume*funcs.get_sell_avg_price(self.mytrades) - buy_volume*funcs.get_buy_avg_price(self.mytrades) + (buy_volume - sell_volume)*last)
 				
+				
 		self.position1 = buy_volume - sell_volume
 		if self.position2==None:
 			self.position2 = buy_volume - sell_volume
@@ -81,7 +82,8 @@ class Agent(object):
 		buy_target_price = 0.5*m.floor(2*mid-s)
 		sell_target_price = 0.5*m.ceil(2*mid+s)
 		
-		my_first = funcs.get_depth(self.mylimits, 1)		
+		my_first = funcs.get_depth(self.mylimits, 1)	
+		
 		my_buy_price = -1 if len(my_first['bid'])==0 else my_first['bid'][0]['price']
 		my_sell_price = -1 if len(my_first['ask'])==0 else my_first['ask'][0]['price']
 		
@@ -90,7 +92,7 @@ class Agent(object):
 		sent = 0
 		canceled = 0
 		sent_prices=[]	
-			
+		
 		if my_buy_price != buy_target_price:
 			if my_buy_price != -1:
 				for id in my_first['bid'][0]['id_orders']:
@@ -135,7 +137,7 @@ class Agent(object):
 sleep_time = 0.1
 		
 funcs = la.functions()
-key = 	'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#'1\G746OIV9SDMFRS26Z4H9OGM3J1VRYM',#
+key = 	'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#
 
 markets = [{'id' :1, 'price' : 60}, {'id' : 2, 'price' : 40}]
 agents = {}
