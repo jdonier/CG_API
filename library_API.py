@@ -9,7 +9,7 @@ class functions(object):
 		return None
 	
 	def call(self, values):
-		host = 'localhost:8000'#'crowdguess2.herokuapp.com'#
+		host = 'crowdguess2.herokuapp.com'#'localhost:8000'#
 		url = '/API/'	
 		headers = {
 			'User-Agent': 'python',

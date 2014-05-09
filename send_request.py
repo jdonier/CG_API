@@ -137,7 +137,7 @@ class Agent(object):
 sleep_time = 0.1
 		
 funcs = la.functions()
-key = 	'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#
+key = 	'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#
 
 markets = [{'id' :1, 'price' : 60}, {'id' : 2, 'price' : 40}]
 agents = {}
