@@ -140,10 +140,11 @@ funcs = la.functions()
 key = 	'1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#
 
 markets = [{'id' :7, 'price' : 20}\
-, {'id' : 8, 'price' : 35}\
-, {'id' : 9, 'price' : 25}\
+, {'id' : 8, 'price' : 40}\
+, {'id' : 9, 'price' : 15}\
 , {'id' : 10, 'price' : 15}\
-, {'id' : 11, 'price' : 5}\
+, {'id' : 11, 'price' : 8}\
+, {'id' : 21, 'price' : 2}\
 ]
 agents = {}
 for market in markets:
