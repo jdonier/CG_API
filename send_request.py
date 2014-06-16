@@ -137,9 +137,14 @@ class Agent(object):
 sleep_time = 0.1
 		
 funcs = la.functions()
-key = 	'8@0S4PYLF187MK5L3U5BWUMKMI70FEMX'#'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#
+key = 	'1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#
 
-markets = [{'id' :1, 'price' : 60}, {'id' : 2, 'price' : 40}]
+markets = [{'id' :7, 'price' : 20}\
+, {'id' : 8, 'price' : 35}\
+, {'id' : 9, 'price' : 25}\
+, {'id' : 10, 'price' : 15}\
+, {'id' : 11, 'price' : 5}\
+]
 agents = {}
 for market in markets:
 	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api_key = key, funcs = funcs)
