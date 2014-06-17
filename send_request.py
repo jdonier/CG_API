@@ -39,28 +39,32 @@ class Agent(object):
 		values = {'key' : self.api_key, 'function' : 'get_trades', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
-		self.last_trade  = data['trades']
+		if data['status']==0:
+			self.last_trade  = data['trades']
 		return -1 if data['status']==1 else data['trades']
 	
 	def GetMyTrades(self):
 		values = {'key' : self.api_key, 'function' : 'get_my_trades', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
-		self.mytrades = data['trades']
+		if data['status']==0:
+			self.mytrades = data['trades']
 		return -1 if data['status']==1 else len(data['trades'])
 	
 	def GetLimits(self):
 		values = {'key' : self.api_key, 'function' : 'get_limits', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
-		self.limits=data['limits']
+		if data['status']==0:
+			self.limits=data['limits']
 		return -1 if data['status']==1 else len(data['limits'])
 	
 	def GetMyLimits(self):
 		values = {'key' : self.api_key, 'function' : 'get_my_limits', 'id_market' : self.id_market}
 		time.sleep(sleep_time)
 		data = funcs.call(values)
-		self.mylimits=data['limits']
+		if data['status']==0:
+			self.mylimits=data['limits']
 		return -1 if data['status']==1 else len(data['limits'])
 			
 	def DoIt(self):
@@ -137,7 +141,7 @@ class Agent(object):
 sleep_time = 0.1
 		
 funcs = la.functions()
-key = 	'1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@OBQA1AT6MWRX3GXR3L41H13HL72QIN'#
+key = 	'1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@NGC5KUO2TADMI69ZXEALGLR6G9CTVD'#
 
 markets = [{'id' :7, 'price' : 20}\
 , {'id' : 8, 'price' : 40}\
@@ -146,6 +150,7 @@ markets = [{'id' :7, 'price' : 20}\
 , {'id' : 11, 'price' : 8}\
 , {'id' : 21, 'price' : 2}\
 ]
+#markets = [{'id' :1, 'price' : 8}]
 agents = {}
 for market in markets:
 	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 10, spread = 0, api_key = key, funcs = funcs)
