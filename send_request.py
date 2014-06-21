@@ -153,29 +153,26 @@ markets = [{'id' :7, 'price' : 0}\
 #markets = [{'id' :1, 'price' : 8}]
 agents = {}
 for market in markets:
-	agents[market['id']] = {}
-	for i in range(0, 2):
-		agents[market['id']][i] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = i, api_key = key, funcs = funcs)
+	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 0, api_key = key, funcs = funcs)
 
-for key, agent_market in agents.iteritems():
-	for no, agent in agent_market.iteritems():
-		try:
-			print ''
-			print 'Agent no ', no,' on market ', key, ' time : ', time.time()
-			agent.balance = agent.GetBalance()
-			print 'balance : ', agent.balance
-			status = agent.GetLastTrade()
-			print 'Fetch trades : ', status
-			status = agent.GetMyTrades()
-			print 'Fetch my trades : ', status
-			status = agent.GetMyLimits()
-			print 'Fetch my limits : ', status	
-			success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
-			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-			print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-		except:
-			print 'Failed to initialize on market ', key
+for key, agent in agents.iteritems():
+	try:
+		print ''
+		print 'Agent on market ', key, ' time : ', time.time()
+		agent.balance = agent.GetBalance()
+		print 'balance : ', agent.balance
+		status = agent.GetLastTrade()
+		print 'Fetch trades : ', status
+		status = agent.GetMyTrades()
+		print 'Fetch my trades : ', status
+		status = agent.GetMyLimits()
+		print 'Fetch my limits : ', status	
+		success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
+		print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+		print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+	except:
+		print 'Failed to initialize on market ', key
 	
 while(True):
 	try:
@@ -183,25 +180,21 @@ while(True):
 		response = agents[markets[0]['id']].HasChanged()
 		for id_market in response:
 			try:
-				agent_market = agents[id_market]
-				for no, agent in agent_market.iteritems():
-					try:
-						print ''
-						print 'Agent on market ', id_market, ' time : ', time.time()
-						agent.balance = agent.GetBalance()
-						print 'balance : ', agent.balance
-						status = agent.GetLastTrade()
-						print 'Fetch trades : ', status
-						status = agent.GetMyTrades()
-						print 'Fetch my trades : ', status
-						status = agent.GetMyLimits()
-						print 'Fetch my limits : ', status
-						success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
-						print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-						print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-						print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-					except:
-						print 'No connection for agent ', no, ' on market', id_market
+				agent = agents[id_market]
+				print ''
+				print 'Agent on market ', id_market, ' time : ', time.time()
+				agent.balance = agent.GetBalance()
+				print 'balance : ', agent.balance
+				status = agent.GetLastTrade()
+				print 'Fetch trades : ', status
+				status = agent.GetMyTrades()
+				print 'Fetch my trades : ', status
+				status = agent.GetMyLimits()
+				print 'Fetch my limits : ', status
+				success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
+				print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+				print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+				print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
 			except:
 				print 'No connection on market', id_market
 	except:
