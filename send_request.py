@@ -143,11 +143,11 @@ sleep_time = 0.1
 funcs = la.functions()
 key = 	'1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@NGC5KUO2TADMI69ZXEALGLR6G9CTVD'#
 
-markets = [{'id' :7, 'price' : 20}\
-, {'id' : 8, 'price' : 40}\
-, {'id' : 9, 'price' : 15}\
-, {'id' : 10, 'price' : 15}\
-, {'id' : 11, 'price' : 8}\
+markets = [{'id' :7, 'price' : 0}\
+, {'id' : 8, 'price' : 50}\
+, {'id' : 9, 'price' : 19}\
+, {'id' : 10, 'price' : 19}\
+, {'id' : 11, 'price' : 10}\
 , {'id' : 21, 'price' : 2}\
 ]
 #markets = [{'id' :1, 'price' : 8}]
