@@ -24,7 +24,7 @@ class Agent(object):
 		self.id_market = id_market
 		
 	def HasChanged(self):
-		values = {'key' : self.api_key, 'function' : 'get_change'}
+		values = {'key' : self.api_key, 'function' : 'get_my_changes'}
 		time.sleep(0.01)
 		data = funcs.call(values)
 		return -1 if data['status']==1 else data['change']
@@ -153,7 +153,7 @@ markets = [{'id' :7, 'price' : 0}\
 #markets = [{'id' :1, 'price' : 8}]
 agents = {}
 for market in markets:
-	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 0, api_key = key, funcs = funcs)
+	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 1, api_key = key, funcs = funcs)
 
 for key, agent in agents.iteritems():
 	try:
