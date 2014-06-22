@@ -155,7 +155,7 @@ markets = [{'id' :7, 'price' : 0}\
 agents = {}
 for market in markets:
 	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 1, api_key = key_1, funcs = funcs)
-	agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 2, api_key = key_2, funcs = funcs)
+	agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
 
 for agents in [agents_1, agents_2]:
 	for key, agent in agents.iteritems():
