@@ -24,7 +24,7 @@ class Agent(object):
 		self.id_market = id_market
 		
 	def HasChanged(self):
-		values = {'key' : self.api_key, 'function' : 'get_my_changes'}
+		values = {'key' : self.api_key, 'function' : 'get_change'}
 		time.sleep(0.01)
 		data = funcs.call(values)
 		return -1 if data['status']==1 else data['change']
