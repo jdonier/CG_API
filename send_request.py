@@ -141,7 +141,8 @@ class Agent(object):
 sleep_time = 0.1
 		
 funcs = la.functions()
-key = 	'1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@NGC5KUO2TADMI69ZXEALGLR6G9CTVD'#
+key_1 = '1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@NGC5KUO2TADMI69ZXEALGLR6G9CTVD'#
+key_2 = '20@0GGWXK0HVF6O4EHNNMDZQPIREYTA81'
 
 markets = [{'id' :7, 'price' : 0}\
 , {'id' : 8, 'price' : 50}\
@@ -153,50 +154,53 @@ markets = [{'id' :7, 'price' : 0}\
 #markets = [{'id' :1, 'price' : 8}]
 agents = {}
 for market in markets:
-	agents[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 1, api_key = key, funcs = funcs)
+	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 1, api_key = key_1, funcs = funcs)
+	agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 2, api_key = key_2, funcs = funcs)
 
-for key, agent in agents.iteritems():
-	try:
-		print ''
-		print 'Agent on market ', key, ' time : ', time.time()
-		agent.balance = agent.GetBalance()
-		print 'balance : ', agent.balance
-		status = agent.GetLastTrade()
-		print 'Fetch trades : ', status
-		status = agent.GetMyTrades()
-		print 'Fetch my trades : ', status
-		status = agent.GetMyLimits()
-		print 'Fetch my limits : ', status	
-		success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
-		print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-		print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-	except:
-		print 'Failed to initialize on market ', key
+for agents in [agents_1, agents_2]:
+	for key, agent in agents.iteritems():
+		try:
+			print ''
+			print 'Agent on market ', key, ' time : ', time.time()
+			agent.balance = agent.GetBalance()
+			print 'balance : ', agent.balance
+			status = agent.GetLastTrade()
+			print 'Fetch trades : ', status
+			status = agent.GetMyTrades()
+			print 'Fetch my trades : ', status
+			status = agent.GetMyLimits()
+			print 'Fetch my limits : ', status	
+			success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
+			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+			print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+		except:
+			print 'Failed to initialize on market ', key
 	
 while(True):
 	try:
 		time.sleep(1)
-		response = agents[markets[0]['id']].HasChanged()
-		for id_market in response:
-			try:
-				agent = agents[id_market]
-				print ''
-				print 'Agent on market ', id_market, ' time : ', time.time()
-				agent.balance = agent.GetBalance()
-				print 'balance : ', agent.balance
-				status = agent.GetLastTrade()
-				print 'Fetch trades : ', status
-				status = agent.GetMyTrades()
-				print 'Fetch my trades : ', status
-				status = agent.GetMyLimits()
-				print 'Fetch my limits : ', status
-				success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
-				print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-				print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-				print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-			except:
-				print 'No connection on market', id_market
+		for agents in [agents_1, agents_2]:
+			response = agents[markets[0]['id']].HasChanged()
+			for id_market in response:
+				try:
+					agent = agents[id_market]
+					print ''
+					print 'Agent on market ', id_market, ' time : ', time.time()
+					agent.balance = agent.GetBalance()
+					print 'balance : ', agent.balance
+					status = agent.GetLastTrade()
+					print 'Fetch trades : ', status
+					status = agent.GetMyTrades()
+					print 'Fetch my trades : ', status
+					status = agent.GetMyLimits()
+					print 'Fetch my limits : ', status
+					success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
+					print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+					print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+					print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+				except:
+					print 'No connection on market', id_market
 	except:
 		print 'Could not connect to the server'
 		
