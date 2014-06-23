@@ -94,6 +94,8 @@ class Agent(object):
 		mid_sup = 0.5*m.ceil(2*mid+0.5)
 		mid_inf = 0.5*m.floor(2*mid-0.5)
 
+		print 'mid', mid
+
 		s = self.spread
 
 		buy_target_price = 0.5*m.floor(2*mid-0.5-s)
