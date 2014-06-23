@@ -111,6 +111,9 @@ class Agent(object):
 
 		my_first = funcs.get_depth(self.mylimits, 1)	
 		
+		buy_target_volume = 0.1*m.floor(10*buy_target_volume)
+		sell_target_volume = 0.1*m.floor(10*sell_target_volume)
+
 		my_buy_price = -1 if len(my_first['bid'])==0 else my_first['bid'][0]['price']
 		my_sell_price = -1 if len(my_first['ask'])==0 else my_first['ask'][0]['price']
 		
@@ -205,22 +208,22 @@ while(True):
 		for agents in [agents_1, agents_2]:
 			response = agents[markets[0]['id']].HasChanged()
 			for id_market in response:
-				try:
-					agent = agents[id_market]
-					print ''
-					agent.balance = agent.GetBalance()
-					status = agent.GetLastTrade()
-					print 'Agent on market ', id_market, 'balance : ', agent.balance, 'Fetch trades : ', status
-					status = agent.GetMyTrades()
-					#print 'Fetch my trades : ', status
-					status = agent.GetMyLimits()
-					print 'Fetch my limits : ', status
-					success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
-					print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-					print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-					print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-				except:
-					print 'No connection on market', id_market
+				#try:
+				agent = agents[id_market]
+				print ''
+				agent.balance = agent.GetBalance()
+				status = agent.GetLastTrade()
+				print 'Agent on market ', id_market, 'balance : ', agent.balance, 'Fetch trades : ', status
+				status = agent.GetMyTrades()
+				#print 'Fetch my trades : ', status
+				status = agent.GetMyLimits()
+				print 'Fetch my limits : ', status
+				success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
+				print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+				print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+				print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+				#except:
+				#	print 'No connection on market', id_market
 	except:
 		print 'Could not connect to the server'
 		
