@@ -189,7 +189,7 @@ for market in markets:
 	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 2, spread = 1, api_key = key_1, funcs = funcs)
 	#agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
 
-for agents in [agents_1, agents_2]:
+for agents in [agents_1]:#, agents_2]:
 	for key, agent in agents.iteritems():
 		#try:
 		print ''
@@ -210,7 +210,7 @@ for agents in [agents_1, agents_2]:
 while(True):
 	try:
 		time.sleep(1)
-		for agents in [agents_1, agents_2]:
+		for agents in [agents_1]:#, agents_2]:
 			response = agents[markets[0]['id']].HasChanged()
 			for id_market in response:
 				#try:
