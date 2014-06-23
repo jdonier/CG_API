@@ -105,7 +105,7 @@ class Agent(object):
 			buy_target_volume = self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup)) - self.position1
 
 		if mid_inf>self.target:	
-			sell_target_volume = self.position - self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
+			sell_target_volume = self.position1 - self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
 		else:
 			sell_target_volume = self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf))
 
