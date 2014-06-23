@@ -1,13 +1,15 @@
 import library_API as la
 import time
 import math as m
+import numpy as np
 
 class Agent(object):
 
-	def __init__(self, id_market, target_price, lambda1, lambda2, tau, qty, spread, api_key, funcs):
+	def __init__(self, id_market, target_price, lambda1, lambda2, alpha, tau, qty, spread, api_key, funcs):
 		self.api_key = api_key
 		self.lambda1 = lambda1
 		self.lambda2 = lambda2
+		self.alpha= alpha
 		self.tau = tau
 		self.qty = qty
 		self.spread = spread
@@ -80,12 +82,34 @@ class Agent(object):
 			self.position2 = buy_volume - sell_volume
 		self.position2 = self.position2 * (1.0 -  m.exp(-1.0/self.tau)) + self.position1 * m.exp(-1.0/self.tau)
 		
-		mid = self.target - self.lambda1 * self.position1 - self.lambda2 * (self.position1 - self.position2)
-		s = self.spread + self.qty * 0.5 * (self.lambda1 + self.lambda2)
-
-		buy_target_price = 0.5*m.floor(2*mid-s)
-		sell_target_price = 0.5*m.ceil(2*mid+s)
+		#mid = self.target - self.lambda1 * self.position1 - self.lambda2 * (self.position1 - self.position2)
+		#s = self.spread + self.qty * 0.5 * (self.lambda1 + self.lambda2)
 		
+		#buy_target_volume = self.qty
+		#sell_target_volume = self.qty
+
+		if self.position1>=0:
+			mid = (self.alpha + self.target)*np.exp(self.position1/self.qty/(self.alpha + self.target))-self.alpha
+		else:
+			mid = (100+self.alpha) - (self.alpha+100-self.target)*np.exp(-self.position1/self.qrt/(self.alpha+100+self.target))
+		mid_sup = 0.5*m.ceil(2*mid+0.5)
+		mid_inf = 0.5*m.floor(2*mid-0.5)
+
+		s = self.spread
+
+		buy_target_price = 0.5*m.floor(2*mid-0.5-s)
+		sell_target_price = 0.5*m.ceil(2*mid+0.5+s)
+
+		if mid_sup>self.target:
+			buy_target_volume = self.qty*(self.alpha + 100 - self.target)*np.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_sup)) - self.position1
+		else:	
+			buy_target_volume = self.qty*(self.alpha + self.target)*np.log((self.alpha + self.target)/(self.alpha + mid_sup)) - self.position1
+
+		if mid_inf>self.target:	
+			sell_target_volume = self.position - self.qty*(self.alpha + 100 - self.target)*np.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
+		else:
+			sell_target_volume = self.position1 + self.qty*(self.alpha + self.target)*np.log((self.alpha + self.target)/(self.alpha + mid_inf))
+
 		my_first = funcs.get_depth(self.mylimits, 1)	
 		
 		my_buy_price = -1 if len(my_first['bid'])==0 else my_first['bid'][0]['price']
@@ -107,7 +131,7 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1						
-			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : self.qty}	
+			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : buy_target_volume}	
 			time.sleep(sleep_time)
 			data = funcs.call(values)
 			if data['status'] == 1:
@@ -126,7 +150,7 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1
-			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : self.qty}	
+			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : sell_target_volume}	
 			time.sleep(sleep_time)
 			data = funcs.call(values)
 			if data['status'] == 1:
@@ -155,8 +179,8 @@ markets = [{'id' :7, 'price' : 0}\
 agents_1 = {}
 agents_2 = {}
 for market in markets:
-	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 2, spread = 1, api_key = key_1, funcs = funcs)
-	agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
+	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 5., tau = 1, qty = 2, spread = 1, api_key = key_1, funcs = funcs)
+	agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 5., tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
 
 for agents in [agents_1, agents_2]:
 	for key, agent in agents.iteritems():
