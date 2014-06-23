@@ -101,14 +101,14 @@ class Agent(object):
 		buy_target_price = 0.5*m.floor(2*mid-0.5-s)
 		sell_target_price = 0.5*m.ceil(2*mid+0.5+s)
 
-		if buy_target_price>0:
+		if mid_inf>0:
 			if mid_sup>self.target:
 				buy_target_volume = self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_sup)) - self.position1
 			else:	
 				buy_target_volume = self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup)) - self.position1
 			buy_target_volume = 0.1*m.floor(10*buy_target_volume)
 
-		if sell_target_price<100:
+		if mid_sup<100:
 			if mid_inf>self.target:	
 				sell_target_volume = self.position1 - self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
 			else:
@@ -136,7 +136,7 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1		
-			if buy_target_price>0:							
+			if mid_inf>0:							
 				values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : buy_target_volume}	
 				time.sleep(sleep_time)
 				data = funcs.call(values)
@@ -156,7 +156,7 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1	
-			if sell_target_price<100:		
+			if mid_sup<100:		
 				values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : sell_target_volume}	
 				time.sleep(sleep_time)
 				data = funcs.call(values)
