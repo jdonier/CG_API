@@ -185,13 +185,11 @@ for agents in [agents_1, agents_2]:
 	for key, agent in agents.iteritems():
 		try:
 			print ''
-			print 'Agent on market ', key, ' time : ', time.time()
 			agent.balance = agent.GetBalance()
-			print 'balance : ', agent.balance
 			status = agent.GetLastTrade()
-			print 'Fetch trades : ', status
+			print 'Agent on market ', key, 'balance : ', agent.balance, 'Fetch trades : ', status
 			status = agent.GetMyTrades()
-			print 'Fetch my trades : ', status
+			#print 'Fetch my trades : ', status
 			status = agent.GetMyLimits()
 			print 'Fetch my limits : ', status	
 			success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
@@ -210,13 +208,11 @@ while(True):
 				try:
 					agent = agents[id_market]
 					print ''
-					print 'Agent on market ', id_market, ' time : ', time.time()
 					agent.balance = agent.GetBalance()
-					print 'balance : ', agent.balance
 					status = agent.GetLastTrade()
-					print 'Fetch trades : ', status
+					print 'Agent on market ', id_market, 'balance : ', agent.balance, 'Fetch trades : ', status
 					status = agent.GetMyTrades()
-					print 'Fetch my trades : ', status
+					#print 'Fetch my trades : ', status
 					status = agent.GetMyLimits()
 					print 'Fetch my limits : ', status
 					success_send, sent, success_cancel, canceled, mid, spread, sent_prices= agent.DoIt()
