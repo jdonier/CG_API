@@ -186,21 +186,21 @@ for market in markets:
 
 for agents in [agents_1, agents_2]:
 	for key, agent in agents.iteritems():
-		try:
-			print ''
-			agent.balance = agent.GetBalance()
-			status = agent.GetLastTrade()
-			print 'Agent on market ', key, 'balance : ', agent.balance, 'Fetch trades : ', status
-			status = agent.GetMyTrades()
-			#print 'Fetch my trades : ', status
-			status = agent.GetMyLimits()
-			print 'Fetch my limits : ', status	
-			success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
-			print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
-			print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
-			print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
-		except:
-			print 'Failed to initialize on market ', key
+		#try:
+		print ''
+		agent.balance = agent.GetBalance()
+		status = agent.GetLastTrade()
+		print 'Agent on market ', key, 'balance : ', agent.balance, 'Fetch trades : ', status
+		status = agent.GetMyTrades()
+		#print 'Fetch my trades : ', status
+		status = agent.GetMyLimits()
+		print 'Fetch my limits : ', status	
+		success_send, sent, success_cancel, canceled, mid, spread, sent_prices = agent.DoIt()
+		print 'Mid-price :',  mid, ' Spread : ', spread, ' Position : ', agent.position1, ' PNL : ', agent.pnl
+		print 'Send_success : ', success_send, ', Sent : ', sent, ', prices : ', sent_prices
+		print 'Cancel_success : ', success_cancel, ', Canceled : ', canceled
+		#except:
+		#	print 'Failed to initialize on market ', key
 	
 while(True):
 	try:
