@@ -1,7 +1,6 @@
 import library_API as la
 import time
 import math as m
-import numpy as np
 
 class Agent(object):
 
@@ -86,13 +85,7 @@ class Agent(object):
 		#s = self.spread + self.qty * 0.5 * (self.lambda1 + self.lambda2)
 		
 		#buy_target_volume = self.qty
-		#sell_target_volume = self.qty
 
-		if self.position1>=0:
-			mid = (self.alpha + self.target)*np.exp(self.position1/self.qty/(self.alpha + self.target))-self.alpha
-		else:
-			mid = (100+self.alpha) - (self.alpha+100-self.target)*np.exp(-self.position1/self.qrt/(self.alpha+100+self.target))
-		mid_sup = 0.5*m.ceil(2*mid+0.5)
 		mid_inf = 0.5*m.floor(2*mid-0.5)
 
 		s = self.spread
@@ -101,14 +94,14 @@ class Agent(object):
 		sell_target_price = 0.5*m.ceil(2*mid+0.5+s)
 
 		if mid_sup>self.target:
-			buy_target_volume = self.qty*(self.alpha + 100 - self.target)*np.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_sup)) - self.position1
+			buy_target_volume = self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_sup)) - self.position1
 		else:	
-			buy_target_volume = self.qty*(self.alpha + self.target)*np.log((self.alpha + self.target)/(self.alpha + mid_sup)) - self.position1
+			buy_target_volume = self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup)) - self.position1
 
 		if mid_inf>self.target:	
-			sell_target_volume = self.position - self.qty*(self.alpha + 100 - self.target)*np.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
+			sell_target_volume = self.position - self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
 		else:
-			sell_target_volume = self.position1 + self.qty*(self.alpha + self.target)*np.log((self.alpha + self.target)/(self.alpha + mid_inf))
+			sell_target_volume = self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf))
 
 		my_first = funcs.get_depth(self.mylimits, 1)	
 		
