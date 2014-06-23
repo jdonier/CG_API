@@ -90,7 +90,7 @@ class Agent(object):
 		if self.position1>=0:
 			mid = (self.alpha + self.target)*m.exp(self.position1/self.qty/(self.alpha + self.target))-self.alpha
 		else:
-			mid = (100+self.alpha) - (self.alpha+100-self.target)*m.exp(-self.position1/self.qrt/(self.alpha+100+self.target))
+			mid = (100+self.alpha) - (self.alpha+100-self.target)*m.exp(-self.position1/self.qty/(self.alpha + 100 - self.target))
 		mid_sup = 0.5*m.ceil(2*mid+0.5)
 		mid_inf = 0.5*m.floor(2*mid-0.5)
 
