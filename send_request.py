@@ -92,8 +92,8 @@ class Agent(object):
 			mid = (self.alpha + self.target)*m.exp(-self.position1/self.qty/(self.alpha + self.target))-self.alpha
 		else:
 			mid = (100.0 + self.alpha) - (self.alpha + 100.0 - self.target)*m.exp(self.position1/self.qty/(self.alpha + 100.0- self.target))
-		mid_sup = mid+0.5
-		mid_inf = mid-0.5
+		mid_sup = mid+0.25+0.5*s
+		mid_inf = mid-0.25-0.5*s
 
 		#print 'mid', mid
 
@@ -195,7 +195,7 @@ markets = [{'id' :7, 'price' : 0}\
 agents_1 = {}
 agents_2 = {}
 for market in markets:
-	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 4, spread = 1, api_key = key_1, funcs = funcs)
+	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 2, spread = 1.5, api_key = key_1, funcs = funcs)
 	#agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
 
 for agents in [agents_1]:#, agents_2]:
