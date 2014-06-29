@@ -92,12 +92,11 @@ class Agent(object):
 			mid = (self.alpha + self.target)*m.exp(-self.position1/self.qty/(self.alpha + self.target))-self.alpha
 		else:
 			mid = (100.0 + self.alpha) - (self.alpha + 100.0 - self.target)*m.exp(self.position1/self.qty/(self.alpha + 100.0- self.target))
-		mid_sup = mid+0.25+0.5*s
-		mid_inf = mid-0.25-0.5*s
-
-		#print 'mid', mid
 
 		s = self.spread
+
+		mid_sup = mid+0.25+0.5*s
+		mid_inf = mid-0.25-0.5*s
 
 		buy_target_price = 0.5*m.floor(2.0*mid-0.5-s)
 		if buy_target_price>=100.0:
