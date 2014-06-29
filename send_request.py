@@ -90,36 +90,36 @@ class Agent(object):
 		if self.position1>=0:
 			mid = (self.alpha + self.target)*m.exp(-self.position1/self.qty/(self.alpha + self.target))-self.alpha
 		else:
-			mid = (100+self.alpha) - (self.alpha+100-self.target)*m.exp(self.position1/self.qty/(self.alpha + 100 - self.target))
-		mid_sup = 0.5*m.ceil(2*mid+0.5)
-		mid_inf = 0.5*m.floor(2*mid-0.5)
+			mid = (100.0 + self.alpha) - (self.alpha + 100.0 - self.target)*m.exp(self.position1/self.qty/(self.alpha + 100.0- self.target))
+		mid_sup = 0.5*m.ceil(2.0*mid+0.5)
+		mid_inf = 0.5*m.floor(2.0*mid-0.5)
 
 		#print 'mid', mid
 
 		s = self.spread
 
-		buy_target_price = 0.5*m.floor(2*mid-0.5-s)
-		if buy_target_price>=100:
+		buy_target_price = 0.5*m.floor(2.0*mid-0.5-s)
+		if buy_target_price>=100.0:
 			buy_target_price = 99.5
 			mid_inf = 99.5
-		sell_target_price = 0.5*m.ceil(2*mid+0.5+s)
-		if sell_target_price<=0:
+		sell_target_price = 0.5*m.ceil(2.0*mid+0.5+s)
+		if sell_target_price<=0.0:
 			sell_target_price = 0.5
 			mid_sup = 0.5
 
-		if mid_inf>0:
+		if mid_inf>0.0:
 			if mid_inf>self.target:
-				buy_target_volume = - self.position1 - self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf)) 
+				buy_target_volume = - self.position1 - self.qty*(self.alpha + 100.0 - self.target)*m.log((100.0 + self.alpha - self.target)/(100.0+ self.alpha - mid_inf)) 
 			else:	
 				buy_target_volume = - self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf)) 
-			buy_target_volume = 0.1*m.floor(10*buy_target_volume)
+			buy_target_volume = 0.1*m.floor(10.0*buy_target_volume)
 
-		if mid_sup<100:
+		if mid_sup<100.0:
 			if mid_sup>self.target:	
-				sell_target_volume = self.position1 + self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_sup))
+				sell_target_volume = self.position1 + self.qty*(self.alpha + 100.0- self.target)*m.log((100.0+ self.alpha - self.target)/(100.0+ self.alpha - mid_sup))
 			else:
 				sell_target_volume = self.position1 - self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup))
-			sell_target_volume = 0.1*m.floor(10*sell_target_volume)
+			sell_target_volume = 0.1*m.floor(10.0*sell_target_volume)
 
 		my_first = funcs.get_depth(self.mylimits, 1)	
 
