@@ -1,6 +1,7 @@
 import library_API as la
 import time
 import math as m
+import random as rd
 
 class Agent(object):
 
@@ -112,6 +113,7 @@ class Agent(object):
 				buy_target_volume = - self.position1 - self.qty*(self.alpha + 100.0 - self.target)*m.log((100.0 + self.alpha - self.target)/(100.0+ self.alpha - mid_inf)) 
 			else:	
 				buy_target_volume = - self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf)) 
+			buy_target_volume = rd.random()*0.5*buy_target_volume + 0.5*buy_target_volume
 			buy_target_volume = 0.1*m.floor(10.0*buy_target_volume)
 
 		if mid_sup<100.0:
@@ -119,6 +121,7 @@ class Agent(object):
 				sell_target_volume = self.position1 + self.qty*(self.alpha + 100.0- self.target)*m.log((100.0+ self.alpha - self.target)/(100.0+ self.alpha - mid_sup))
 			else:
 				sell_target_volume = self.position1 - self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup))
+			sell_target_volume = rd.random()*0.5*sell_target_volume + 0.5*sell_target_volume
 			sell_target_volume = 0.1*m.floor(10.0*sell_target_volume)
 
 		my_first = funcs.get_depth(self.mylimits, 1)	
