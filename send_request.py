@@ -101,19 +101,21 @@ class Agent(object):
 		buy_target_price = 0.5*m.floor(2*mid-0.5-s)
 		if buy_target_price>=100:
 			buy_target_price = 99.5
+			mid_inf = 99.5
 		sell_target_price = 0.5*m.ceil(2*mid+0.5+s)
 		if sell_target_price<=0:
 			sell_target_price = 0.5
+			mid_sup = 0.5
 
 		if mid_inf>0:
-			if mid_sup>self.target:
+			if mid_inf>self.target:
 				buy_target_volume = self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_sup)) + self.position1
 			else:	
 				buy_target_volume = self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup)) + self.position1
 			buy_target_volume = 0.1*m.floor(10*buy_target_volume)
 
 		if mid_sup<100:
-			if mid_inf>self.target:	
+			if mid_sup>self.target:	
 				sell_target_volume = - self.position1 - self.qty*(self.alpha + 100 - self.target)*m.log((100 + self.alpha - self.target)/(100 + self.alpha - mid_inf))
 			else:
 				sell_target_volume = - self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf))
