@@ -180,17 +180,17 @@ key_1 = '1@MDM4Y0SG18GFEP9WXNIIMHJ82679YV'#'1@NGC5KUO2TADMI69ZXEALGLR6G9CTVD'#
 key_2 = '20@0GGWXK0HVF6O4EHNNMDZQPIREYTA81'
 
 markets = [{'id' :7, 'price' : 0}\
-, {'id' : 8, 'price' : 50}\
-, {'id' : 9, 'price' : 19}\
-, {'id' : 10, 'price' : 19}\
-, {'id' : 11, 'price' : 10}\
-, {'id' : 21, 'price' : 2}\
+, {'id' : 8, 'price' : 20}\
+, {'id' : 9, 'price' : 50}\
+, {'id' : 10, 'price' : 18}\
+, {'id' : 11, 'price' : 8}\
+, {'id' : 21, 'price' : 4}\
 ]
 #markets = [{'id' :1, 'price' : 8}]
 agents_1 = {}
 agents_2 = {}
 for market in markets:
-	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 2, spread = 1, api_key = key_1, funcs = funcs)
+	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 4, spread = 1, api_key = key_1, funcs = funcs)
 	#agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
 
 for agents in [agents_1]:#, agents_2]:
