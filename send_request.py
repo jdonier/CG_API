@@ -99,7 +99,11 @@ class Agent(object):
 		s = self.spread
 
 		buy_target_price = 0.5*m.floor(2*mid-0.5-s)
+		if buy_target_price>=100:
+			buy_target_price = 99.5
 		sell_target_price = 0.5*m.ceil(2*mid+0.5+s)
+		if sell_target_price<=0:
+			sell_target_price = 0.5
 
 		#if mid_inf>0:
 		#	if mid_sup>self.target:
@@ -136,15 +140,15 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1		
-			#if mid_inf>0:							
-			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : buy_target_volume}	
-			time.sleep(sleep_time)
-			data = funcs.call(values)
-			if data['status'] == 1:
-				success_send = False
-			else:
-				sent += 1
-				sent_prices.append(buy_target_price)
+			if buy_target_price>0:							
+				values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : 1, 'price' : buy_target_price, 'volume' : buy_target_volume}	
+				time.sleep(sleep_time)
+				data = funcs.call(values)
+				if data['status'] == 1:
+					success_send = False
+				else:
+					sent += 1
+					sent_prices.append(buy_target_price)
 		
 		if my_sell_price != sell_target_price:
 			if my_sell_price != -1:
@@ -156,15 +160,15 @@ class Agent(object):
 						success_cancel = False
 					else:
 						canceled += 1	
-			#if mid_sup<100:		
-			values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : sell_target_volume}	
-			time.sleep(sleep_time)
-			data = funcs.call(values)
-			if data['status'] == 1:
-				success_send = False
-			else:
-				sent += 1
-				sent_prices.append(sell_target_price)
+			if sell_target_price<100:		
+				values = {'key' : self.api_key, 'function' : 'send_order', 'id_market' : self.id_market, 'side' : -1, 'price' : sell_target_price, 'volume' : sell_target_volume}	
+				time.sleep(sleep_time)
+				data = funcs.call(values)
+				if data['status'] == 1:
+					success_send = False
+				else:
+					sent += 1
+					sent_prices.append(sell_target_price)
 			
 		return success_send, sent, success_cancel, canceled, mid, s, sent_prices
 	
