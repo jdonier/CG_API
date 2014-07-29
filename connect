@@ -1,0 +1,1 @@
+ssh -i key_jonathan.pem ubuntu@54.187.136.40
