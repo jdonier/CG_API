@@ -5,14 +5,16 @@ import random as rd
 
 class Agent(object):
 
-	def __init__(self, id_market, target_price, lambda1, lambda2, alpha, tau, qty, spread, api_key, funcs):
+	def __init__(self, id_market, target_price, lambda1, lambda2, alpha, tau, qty, exposure, spread, fee, api_key, funcs):
 		self.api_key = api_key
 		self.lambda1 = lambda1
 		self.lambda2 = lambda2
 		self.alpha= alpha
 		self.tau = tau
 		self.qty = qty
+		self.exposure_max = exposure
 		self.spread = spread
+		self.fee = fee
 		self.position1 = 0
 		self.position2 = None
 		self.pnl = 0
@@ -87,39 +89,43 @@ class Agent(object):
 		
 		#buy_target_volume = self.qty
 		#sell_target_volume = self.qty
-
-		if self.position1>=0:
-			mid = (self.alpha + self.target)*m.exp(-self.position1/self.qty/(self.alpha + self.target))-self.alpha
-		else:
-			mid = (100.0 + self.alpha) - (self.alpha + 100.0 - self.target)*m.exp(self.position1/self.qty/(self.alpha + 100.0- self.target))
+	
+		mid = la.get_price_from_position(self.position1, self.target, self.exposure_max, self.alpha)
+		
+		#if self.position1>=0:
+		#	mid = (self.alpha + self.target)*m.exp(-self.position1/self.qty/(self.alpha + self.target))-self.alpha
+		#else:
+		#	mid = (100.0 + self.alpha) - (self.alpha + 100.0 - self.target)*m.exp(self.position1/self.qty/(self.alpha + 100.0- self.target))
 
 		s = self.spread
-
+		
 		mid_sup = mid+0.25+0.5*s
 		mid_inf = mid-0.25-0.5*s
 
-		buy_target_price = 0.5*m.floor(2.0*mid-0.5-s)
+		buy_target_price = 0.5*m.floor(2.0*mid-0.5-s-self.fee)
 		if buy_target_price>=100.0:
 			buy_target_price = 99.5
 			mid_inf = 99.5
-		sell_target_price = 0.5*m.ceil(2.0*mid+0.5+s)
+		sell_target_price = 0.5*m.ceil(2.0*mid+0.5+s+self.fee)
 		if sell_target_price<=0.0:
 			sell_target_price = 0.5
 			mid_sup = 0.5
 
 		if mid_inf>0.0:
-			if mid_inf>self.target:
-				buy_target_volume = - self.position1 - self.qty*(self.alpha + 100.0 - self.target)*m.log((100.0 + self.alpha - self.target)/(100.0+ self.alpha - mid_inf)) 
-			else:	
-				buy_target_volume = - self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf)) 
+			buy_target_volume = la.get_position_from_price(mid_inf, self.target, self.exposure_max, self.alpha) - self.position1
+		#	if mid_inf>self.target:
+		#		buy_target_volume = - self.position1 - self.qty*(self.alpha + 100.0 - self.target)*m.log((100.0 + self.alpha - self.target)/(100.0+ self.alpha - mid_inf)) 
+		#	else:	
+		#		buy_target_volume = - self.position1 + self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_inf)) 
 			buy_target_volume = rd.random()*0.5*buy_target_volume + 0.5*buy_target_volume
 			buy_target_volume = 0.1*m.floor(10.0*buy_target_volume)
 
 		if mid_sup<100.0:
-			if mid_sup>self.target:	
-				sell_target_volume = self.position1 + self.qty*(self.alpha + 100.0- self.target)*m.log((100.0+ self.alpha - self.target)/(100.0+ self.alpha - mid_sup))
-			else:
-				sell_target_volume = self.position1 - self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup))
+			sell_target_volume = self.position1 - la.get_position_from_price(mid_sup, self.target, self.exposure_max, self.alpha)
+		#	if mid_sup>self.target:	
+		#		sell_target_volume = self.position1 + self.qty*(self.alpha + 100.0- self.target)*m.log((100.0+ self.alpha - self.target)/(100.0+ self.alpha - mid_sup))
+		#	else:
+		#		sell_target_volume = self.position1 - self.qty*(self.alpha + self.target)*m.log((self.alpha + self.target)/(self.alpha + mid_sup))
 			sell_target_volume = rd.random()*0.5*sell_target_volume + 0.5*sell_target_volume
 			sell_target_volume = 0.1*m.floor(10.0*sell_target_volume)
 
@@ -197,7 +203,7 @@ markets = [\
 agents_1 = {}
 agents_2 = {}
 for market in markets:
-	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 2, spread = 5, api_key = key_1, funcs = funcs)
+	agents_1[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 2, exposure = 50, spread = 4, fee = 2, api_key = key_1, funcs = funcs)
 	#agents_2[market['id']] = Agent(id_market = market['id'], target_price =  market['price'], lambda1 = 0.05, lambda2 = 0.05, alpha = 10., tau = 1, qty = 3, spread = 2, api_key = key_2, funcs = funcs)
 
 for agents in [agents_1]:#, agents_2]:
