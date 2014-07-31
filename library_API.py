@@ -8,13 +8,13 @@ class functions(object):
 	def __init__(self):
 		return None
 	
-	def get_price_from_position(position1, target, max_loss, alpha):
+	def get_price_from_position(self, position1, target, max_loss, alpha):
 		if position1>0:
 			return alpha*(1./(alpha/(alpha+target) + position1*target/(100.*max_loss))-1.)
 		else:
 			return 100. - alpha*(1./(alpha/(100.+alpha-target) - position1*(100.-target)/(100.*max_loss))-1.)
 		
-	def get_position_from_price(price, target, max_loss, alpha):
+	def get_position_from_price(self, price, target, max_loss, alpha):
 		if price<target:
 			return 100.*max_loss/target*(alpha/(alpha+price) - alpha/(alpha+target))
 		else:
