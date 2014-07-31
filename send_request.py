@@ -90,7 +90,7 @@ class Agent(object):
 		#buy_target_volume = self.qty
 		#sell_target_volume = self.qty
 	
-		mid = la.get_price_from_position(self.position1, self.target, self.exposure_max, self.alpha)
+		mid = funcs.get_price_from_position(self.position1, self.target, self.exposure_max, self.alpha)
 		
 		#if self.position1>=0:
 		#	mid = (self.alpha + self.target)*m.exp(-self.position1/self.qty/(self.alpha + self.target))-self.alpha
@@ -112,7 +112,7 @@ class Agent(object):
 			mid_sup = 0.5
 
 		if mid_inf>0.0:
-			buy_target_volume = la.get_position_from_price(mid_inf, self.target, self.exposure_max, self.alpha) - self.position1
+			buy_target_volume = funcs.get_position_from_price(mid_inf, self.target, self.exposure_max, self.alpha) - self.position1
 		#	if mid_inf>self.target:
 		#		buy_target_volume = - self.position1 - self.qty*(self.alpha + 100.0 - self.target)*m.log((100.0 + self.alpha - self.target)/(100.0+ self.alpha - mid_inf)) 
 		#	else:	
@@ -121,7 +121,7 @@ class Agent(object):
 			buy_target_volume = 0.1*m.floor(10.0*buy_target_volume)
 
 		if mid_sup<100.0:
-			sell_target_volume = self.position1 - la.get_position_from_price(mid_sup, self.target, self.exposure_max, self.alpha)
+			sell_target_volume = self.position1 - funcs.get_position_from_price(mid_sup, self.target, self.exposure_max, self.alpha)
 		#	if mid_sup>self.target:	
 		#		sell_target_volume = self.position1 + self.qty*(self.alpha + 100.0- self.target)*m.log((100.0+ self.alpha - self.target)/(100.0+ self.alpha - mid_sup))
 		#	else:
